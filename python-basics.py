@@ -142,25 +142,28 @@ print(students["Edgar"]["age"])
 
 
 while is_true:
+ 
  vending_machine = {1: {"name": "Sting", "price": 1},
                     2: {"name": "Pepsi", "price": 2},
                     3: {"name": "Coke", "price": 3},
                     4: {"name": "Cold Cofee", "price": 5}
                     }
- choice = int(input(f"""Enter your pick/
-                {vending_machine[1]}
-                {vending_machine[2]}
-                {vending_machine[3]}
-                {vending_machine[4]}
-                """))
+ 
  money = float(input("Insert money"))
+ keys = list(vending_machine.keys())
+ for i in range(len(keys)):
+     item = vending_machine[keys[i]]
+     print(f"{keys[i]} -> {item["name"]} ${item["price"]}")
 
- if money < vending_machine[choice]["price"]:
+ choice = int(input("Enter your pick"))
+ item = vending_machine[choice]
+
+ if money < item["price"]:
      print("Insufficent money")
      break
  else:
-     money = money - vending_machine[choice]["price"]
-     print("Enjoy your " + vending_machine[choice]["name"])
+     money = money - item["price"]
+     print("Enjoy your " + item["name"])
      
 
  re_try = input("Would you like to buy anything else? y/N")
@@ -172,7 +175,13 @@ while is_true:
 
 # Data structures - tuples
 
+#explicit
+
 tuple_example = ("red", "green", "blue")
+
+#implicit
+
+tuple_example = "red", "green", "blue"
 
 print(tuple_example[0])
 print(tuple_example[0 : 2])
@@ -188,3 +197,11 @@ set_example = {1, 3, 3, 6, 7}
 # Duplicates are removed
 
 print(set_example)
+
+# Converting a list into a set (used to remove duplicates)
+
+list_to_set = [1, 3, 5, 2, 5, 1]
+
+list_to_set = set(list_to_set)
+
+print(list_to_set)
