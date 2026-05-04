@@ -1,4 +1,4 @@
-# Functions
+# Functions --------------------------------------------------------------------
 
 # Basic functions
 def greet():
@@ -59,7 +59,7 @@ def geometry_calculator(breadth, width):
 
 area, perimeter = geometry_calculator(4, 2)
 
-# Importing built-in modules
+# Importing built-in modules ----------------------------------------------------------
 
 # Math
 import math
@@ -81,3 +81,41 @@ print(sqrt(25))
 
 # Importing with alias
 import pandas as pd
+
+# Working with APIs -------------------------------------------------------------------
+import requests
+
+latitude = 25.3753
+longitude = 68.3651
+
+url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m"
+
+#Response from website
+response = requests.get(url)
+
+# Converting reponse into Python object
+data = response.json()
+
+print(data)
+
+temprature = data["current"]["temperature_2m"]
+
+# Creating a get_temp function
+def get_temp(latitude, longitude):
+    url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m"
+
+    response = requests.get(url)
+    data = response.json()
+    temprature = data["current"]["temperature_2m"]
+
+    return temprature
+
+
+hyderabad_temp = get_temp(25.3753, 68.3651)
+leeds_temp = get_temp(53.80, -1.55)
+antalya_temp = get_temp(36.8864, 30.7105)
+
+print(f"Hyderabad: {hyderabad_temp}°C")
+print(f"Leeds: {leeds_temp}°C")
+print(f"Antalya: {antalya_temp}°C")
+
