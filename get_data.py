@@ -43,7 +43,7 @@ if not os.path.exists('data'):
     os.makedirs('data')
 
 plt.savefig('data/weather_chart.png')
-df.to_csv('data/paris_weather.csv', index=False)
+df.to_csv('data/hyderabad_weather.csv', index=False)
 
 print(f"Average temperature: {df['avg_temp'].mean():.1f}°C")
 print("Files saved in 'data' folder")
