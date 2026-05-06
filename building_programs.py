@@ -119,3 +119,40 @@ print(f"Hyderabad: {hyderabad_temp}°C")
 print(f"Leeds: {leeds_temp}°C")
 print(f"Antalya: {antalya_temp}°C")
 
+# Working with files --------------------------------------------
+
+import os
+
+# Fetches curent working directory
+os.getcwd()
+
+# Storing the contents of files
+with open("data/hyderabad_weather.csv", "r") as file:
+    content = file.read()
+
+print(content)
+
+# Python handles regular files and modules differently
+import sys
+
+# Locations Python looks for modules in:
+print(sys.path)
+
+# Importing a module - Python searches for it
+#import mymodule                    - Looks for mymodule.py
+#from folder.utils import helper    - Looks for folder/utils.py
+
+
+# How to dd a folder to Python's search path:
+sys.path.append("/path/to/my/folder")
+
+# How to import from a parent folder
+parent = os.path.dirname(os.path.dirname(__file__))
+sys.path.append(parent)
+
+
+
+
+
+
+
