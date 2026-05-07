@@ -150,6 +150,30 @@ sys.path.append("/path/to/my/folder")
 parent = os.path.dirname(os.path.dirname(__file__))
 sys.path.append(parent)
 
+# Error handling ----------------------------------------------------------
+
+# Try / Except example
+
+try:
+    with open("eggs.txt", "r") as r:
+        content = r.read()
+except FileNotFoundError:
+    print("Error: File not found")
+    
+# example 2
+try:
+    first_num = int(input("Enter an integer: "))
+    second_num = int(input("Enter another integer: "))
+    if second_num == 0:
+        raise ZeroDivisionError
+    division = first_num / second_num        # This operation will result in a runtime error
+    print(f"Result: {division}")
+except ValueError:                                      # Catches the error
+    print("Error: Non-integer value(s) entered")
+except ZeroDivisionError:                               # Catches the error
+    print("Error: Second integer is zero")
+finally:                                                # This always runs
+    print("Operation Ended")
 
 
 
