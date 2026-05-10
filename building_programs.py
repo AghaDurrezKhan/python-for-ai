@@ -345,6 +345,19 @@ class Book:
             return "Available"
         else:
             return "Checked Out"
+        
+    @staticmethod
+    def validate_isbn(isbn):
+        isbn = isbn.replace("-", "")
+        if len(isbn) == 13 and isbn.isdigit():
+            return "Valid Isbn"
+        else:
+            return "Invalid Isbn"
+        
+    @classmethod
+    def from_dict(cls, data):
+        return cls(data["title"], data["author"], data["isbn"], data["is_available"] )
+
 
     def __str__(self):
         return f"{self.title} by {self.author} | {self.status}"
