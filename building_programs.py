@@ -356,7 +356,7 @@ class Book:
         
     @classmethod
     def from_dict(cls, data):
-        return cls(data["title"], data["author"], data["isbn"], data["is_available"] )
+        return cls(data["title"], data["author"], data["isbn"], data["is_available"])
 
 
     def __str__(self):
@@ -461,4 +461,18 @@ books = [
 df = pd.DataFrame([vars(b) for b in books])
 
 print(df.loc[df["is_available"]])
-        
+
+print(Book.validate_isbn("978-0141331645"))
+print(Book.validate_isbn("123"))
+print(Book.validate_isbn("ABCDEFGHIJKLM")) 
+
+data = {
+    "title": "Dune",
+    "author": "Frank Herbert",
+    "isbn": "978-0441013593",
+    "is_available": True
+}
+
+book12 = Book.from_dict(data)
+print(book12.__str__)
+
