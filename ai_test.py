@@ -1,4 +1,5 @@
 import google.generativeai as genai
+import os
 import pandas as pd
 
 class Flashcard:
@@ -14,15 +15,24 @@ class Deck:
         self.name = name
         self.cards = []
 
+    @classmethod
+    def from_dict(cls, dict):
+        return cls(dict["name"])
+
+
     def add_card(self, card):
         self.cards.append(card)
 
-    def remove_card(self, card):
-        self.cards.remove(card)
+    def remove_card(self, topic):
+        for card in self.cards:
+           if card.topic == topic:
+               self.cards.remove(card)
+               return
+           
+        print("Card not found")          
 
     def get_topics(self):
-        for card in self.cards:
-            print(card.topic)
+            return [card.topic for card in self.cards]
 
     def __str__(self):
         return f"Deck: {self.name} | Cards: {len(self.cards)}"
@@ -37,15 +47,15 @@ deck1.add_card(card1)
 deck1.add_card(card2)
 deck1.add_card(card3)
 
-deck1.remove_card(card3)
-deck1.get_topics()
-deck1.add_card(card3)
+deck1.remove_card("Python")
+print(deck1.get_topics())
+deck1.add_card(card1)
 
-print(deck1.__str__())
+print(deck1)
 
 df = pd.DataFrame(vars(d) for d in deck1.cards)
 
-genai.configure(api_key="API Key")
+genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 model = genai.GenerativeModel("gemini-3-flash-preview")
 
 def generate_question(flashcard):
@@ -58,3 +68,18 @@ def generate_question(flashcard):
 
 for c in deck1.cards:
     print(generate_question(c))
+
+df = pd.DataFrame(vars(c) for c in deck1.cards)
+
+data = []
+
+for c in deck1.cards:
+    question = generate_question(c)
+    data.append({
+        "topic": c.topic,
+        "content": c.content,
+        "question": question
+    })
+    
+
+df = pd.DataFrame(data)
