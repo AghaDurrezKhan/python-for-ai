@@ -477,8 +477,8 @@ book12 = Book.from_dict(data)
 print(book12.__str__)
 
 
-# import pandas as pd
-# from datetime import datetime
+import pandas as pd
+from datetime import datetime
 
 class BankAccount:
     def __init__(self, owner):
@@ -487,8 +487,15 @@ class BankAccount:
         self.transactions = []
 
     @property
-    def set_balance(self, balance):
-        self.balance = balance
+    def balance(self):
+        return self.__balance
+    
+    @balance.setter
+    def balance(self, balance):
+        if balance >= 0:
+            self.__balance = balance
+        else:
+            print("Error: Balance cannot be negative")
 
     @classmethod
     def from_dict(cls, data):
@@ -498,7 +505,7 @@ class BankAccount:
 
     @staticmethod
     def validate_deposit(deposit):
-        if isinstance(deposit, int):
+        if isinstance(deposit, (int, float)):
             if deposit > 0:
                 return True
             else:
@@ -533,7 +540,7 @@ class SavingsAccount(BankAccount):
         self.interest_rate = 0.05
 
     def apply_interest(self):
-        interest = (self.balance * self.interest_rate)/100
+        interest = self.balance * self.interest_rate
         self.balance += interest
         self.transactions.append(f"{datetime.now()} - Interest of ${interest} applied")
 
@@ -569,7 +576,7 @@ data2 = {
     "balance": bank_account.balance,
     "transactions": bank_account.get_transactions(),
 }
-df = pd.DataFrame(data, data2)
+df = pd.DataFrame([data, data2])
 
 bank_account.validate_deposit("uishc")
 
