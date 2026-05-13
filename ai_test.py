@@ -16,8 +16,10 @@ class Deck:
         self.cards = []
 
     @classmethod
-    def from_dict(cls, dict):
-        return cls(dict["name"])
+    def from_dict(cls, data):
+        deck = cls(data["name"])
+        deck.cards = data["cards"]
+        return deck
 
 
     def add_card(self, card):
@@ -71,15 +73,21 @@ for c in deck1.cards:
 
 df = pd.DataFrame(vars(c) for c in deck1.cards)
 
-data = []
+
+data1 = {"name": "firstdeck", "cards": [card1, card2, card3]}
+deck2 = Deck.from_dict(data1)
+deck2.__str__()
+
+
+data2 = []
 
 for c in deck1.cards:
     question = generate_question(c)
-    data.append({
+    data2.append({
         "topic": c.topic,
         "content": c.content,
         "question": question
     })
     
 
-df = pd.DataFrame(data)
+df = pd.DataFrame(data2)
