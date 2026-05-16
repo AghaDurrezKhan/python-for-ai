@@ -580,13 +580,22 @@ df = pd.DataFrame([data, data2])
 
 bank_account.validate_deposit("uishc")
 
-THRESHOLDS = {
+
+# Global variable
+GRADE_THRESHOLDS = {
     "A": (90, 100),
     "B": (80, 89),
     "C": (70, 79),
     "D": (60, 69),
     "F": (0, 59)
 }
+
+# Helper function
+def calculate_grade(score):
+        for grade, (low, high) in GRADE_THRESHOLDS.items():
+            if low <= score <= high:
+                return grade
+
 
 class Subject:
     def __init__(self, name, score):
@@ -595,9 +604,7 @@ class Subject:
   
     @property
     def grade(self):
-        for grade, (low, high) in THRESHOLDS.items():
-            if low <= self.score <= high:
-                return grade
+        return calculate_grade(self.score)
 
     @property
     def score(self):
@@ -625,13 +632,11 @@ class Student:
         self.subjects.append(subject)
 
     def remove_subject(self, name):
-        for subject in self.subjects:
-            if subject.name == name:
-                self.subjects.remove(subject)
-                return
-
+        subject = next((s for s in self.subjects if s.name == name), None)
+        if subject:
+            self.subjects.remove(subject)
         else:
-            print("Subject not found")
+            print(f"Subject: {name} is not studied by Student: {self.name}")
 
     @classmethod
     def from_dict(cls, data):
@@ -641,7 +646,7 @@ class Student:
 
     @property
     def average_score(self):
-        if len(self.subjects) > 0:
+        if self.subjects:
             average_score = sum(s.score for s in self.subjects)/len(self.subjects)
             return average_score
         else:
@@ -649,9 +654,8 @@ class Student:
 
     @property
     def average_grade(self):
-        for grade, (low, high) in THRESHOLDS.items():
-            if low <= self.average_score <= high:
-                return grade
+        if self.average_score is not None:
+            return calculate_grade(self.average_score)
     
     @property
     def top_subject(self):
@@ -676,34 +680,34 @@ class Classroom:
         self.students.append(student)
 
     def remove_student(self, name):
-        for student in self.students:
-            if student.name == name:
-                self.students.remove(student) 
-                return
+        student = next((s for s in self.students if s.name == name), None)
+        if student:
+            self.students.remove(student) 
         else:
-            print(f"Error: Student: {name} is not in Classroom: {self.name}")
+            print(f"Student: {name} is not in Classroom: {self.name}")
 
     @staticmethod
     def is_passed(students):
-        passed_students = []
-        for student in students:
-            if student.average_score > 59:
-                passed_students.append(student)
-
-        return passed_students
+        return [student for student in students if student.average_score > 59]
 
     @property
     def top_student(self):
         return max(self.students, key=lambda student:student.average_score)
     
-    def get_class_average(self):
-            if len(self.students) > 0:
+    @property
+    def average_score(self):
+            if self.students:
                 return sum(student.average_score for student in self.students)/len(self.students)
             else:
                 print("Error: There must be atleast one student")
 
+    @property
+    def average_grade(self):
+            if self.average_score is not None:
+                return calculate_grade(self.average_score)
+
     def __str__(self):
-        return f"Class: {self.name} | Students: {len(self.students)} | Average: {self.get_class_average()}"
+        return f"Class: {self.name} | Students: {len(self.students)} | Average: {self.average_score:.2f} | {self.average_grade}"
 
 
 # Creating students
