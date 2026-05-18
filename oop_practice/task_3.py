@@ -34,7 +34,7 @@ class Subject:
         if 0 <= value <= 100:
             self._score = value
         else:
-            print("Score must be in the range of 0-100")
+            raise ValueError("Score must be in the range of 0-100")
         
 
     def __str__(self):
